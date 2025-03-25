@@ -13,3 +13,37 @@ quesadillas = [["Classic Cheese Quesadilla", "Melted cheddar & mozzarella in a c
 
 user_info = []
 user_cart = []
+
+# functions
+def get_int(txt):
+    """This function is to check each integer user input to control the input types and prevent the program from crashing"""
+    while True:
+        try:
+            x = int(input(txt))
+            return x
+        except ValueError:
+            print()
+            print("Invalid input. Please enter a number.")
+
+def delivery_user_info():
+    print()
+    print("Customer Details:")
+    print()
+    first_name = input("First Name: ")
+    print()
+    address = input("Address: ")
+    print()
+    phone_number = input("Phone Number: ")
+    user_info.append(first_name, address, phone_number)
+    print()
+    print("Details Saved.")
+
+def pick_up_user_info():
+    print()
+    print("Customer Details:")
+    print()
+    first_name = input("First Name: ")
+    print()
+    user_info.append(first_name)
+    print()
+    print("Details Saved.")
