@@ -11,7 +11,8 @@ quesadillas = [["Classic Cheese Quesadilla", "Melted cheddar & mozzarella in a c
                ["Seafood Quesadilla ", "Garlic butter prawns, creamy cheese blend, and zesty lime drizzle.", 15.99], 
                ["Breakfast Quesadilla","Scrambled eggs, crispy bacon, hash browns, and cheese blend with hollandaise drizzle.", 13.99]] 
 
-user_info = []
+"""I put the user information in the main scope because the program has to utilise this information at the end (to confirm with the user)."""
+user_info = [] # information will be saved after pickup/delivery function called.
 user_cart = []
 
 # functions
@@ -25,25 +26,55 @@ def get_int(txt):
             print()
             print("Invalid input. Please enter a number.")
 
+
 def delivery_user_info():
+    """This function asks and saves the user's information for delivery options."""
     print()
     print("Customer Details:")
     print()
-    first_name = input("First Name: ")
+    first_name = input("First Name: ").lower().strip()
     print()
-    address = input("Address: ")
+    address = input("Address: ").lower().strip()
     print()
-    phone_number = input("Phone Number: ")
+    phone_number = input("Phone Number: ").lower().strip()
     user_info.append(first_name, address, phone_number)
     print()
     print("Details Saved.")
+    print(user_info) # test
+
 
 def pick_up_user_info():
     print()
     print("Customer Details:")
     print()
-    first_name = input("First Name: ")
+    first_name = input("First Name: ").lower().strip()
     print()
     user_info.append(first_name)
     print()
     print("Details Saved.")
+
+
+def pickup_or_delivery():
+    option = input("Would you like to \n1) pick up \n2) delivery\n\n> ").strip().lower()
+    if option == "1":
+        pick_up_user_info()
+    elif option == "2":
+        delivery_user_info()
+
+# fix
+def quesadillas_menu():
+    count = 0 # to keep count of how many elements three are in the list.
+    for quesadilla in quesadillas:
+        print(f"{count}) {quesadilla[0]} - {quesadilla[2]}\n{quesadilla[1]}")
+        count += 1 # adds 1 to count 
+
+
+def main():
+    pass
+    # view quesadilla menu (function)
+    # view bevarage menu (function)
+    # add option(s) to cart: (function)
+
+
+if __name__ == "__main__": # python convention, anything under this  is ran only in this page.
+    quesadillas_menu() 
