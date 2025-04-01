@@ -15,7 +15,7 @@ quesadillas = [["Classic Cheese Quesadilla", "Melted cheddar & mozzarella in a c
 user_info = [] # information will be saved after pickup/delivery function called.
 user_cart = []
 
-# functions
+
 def get_int(txt):
     """This function is to check each integer user input to control the input types and prevent the program from crashing"""
     while True:
@@ -28,7 +28,7 @@ def get_int(txt):
 
 
 def delivery_user_info():
-    """This function asks and saves the user's information for delivery options."""
+    """This function saves the user's info which is specific for the delivery option."""
     print()
     print("Customer Details:")
     print()
@@ -44,6 +44,7 @@ def delivery_user_info():
 
 
 def pick_up_user_info():
+    """This function saves the user's info which is specific for the pick up option."""
     print()
     print("Customer Details:")
     print()
@@ -55,19 +56,22 @@ def pick_up_user_info():
 
 
 def pickup_or_delivery():
+    """This funciton asks the user to choose whether they want to pick up the food or get it delivered. It also determines what information is asked of them."""
     option = input("Would you like to \n1) pick up \n2) delivery\n\n> ").strip().lower()
     if option == "1":
         pick_up_user_info()
     elif option == "2":
         delivery_user_info()
 
-# fix
+
 def quesadillas_menu():
+    """This function displays all the available quesadillas with a price and a description."""
     count = 0 # to keep count of how many elements three are in the list.
     for quesadilla in quesadillas:
-        print(f"{count}) {quesadilla[0]} - {quesadilla[2]}\n{quesadilla[1]}")
         count += 1 # adds 1 to count 
-
+        print()
+        print(f"{count}) {quesadilla[0]} - ${quesadilla[2]}\n{quesadilla[1]}")
+        
 
 def main():
     pass
