@@ -24,7 +24,7 @@ def get_int(txt):
             return x
         except ValueError:
             print()
-            print("Invalid input. Please enter a number.")
+            print("Invalid Input. Please enter a number.")
 
 
 def delivery_user_info():
@@ -40,7 +40,6 @@ def delivery_user_info():
     user_info.append(first_name, address, phone_number)
     print()
     print("Details Saved.")
-    print(user_info) # test
 
 
 def pick_up_user_info():
@@ -57,10 +56,10 @@ def pick_up_user_info():
 
 def pickup_or_delivery():
     """This funciton asks the user to choose whether they want to pick up the food or get it delivered. It also determines what information is asked of them."""
-    option = input("Would you like to \n1) pick up \n2) delivery\n\n> ").strip().lower()
-    if option == "1":
+    option = get_int("Would you like to: \n1) pick up \n2) delivery\n\n> ").strip().lower()
+    if option == 1:
         pick_up_user_info()
-    elif option == "2":
+    elif option == 2:
         delivery_user_info()
 
 
@@ -71,10 +70,32 @@ def quesadillas_menu():
         count += 1 # adds 1 to count 
         print()
         print(f"{count}) {quesadilla[0]} - ${quesadilla[2]}\n{quesadilla[1]}")
-        
 
-def main():
+# fix
+# should i not make this a separate function anymore? just put this option in the display menu option?
+def add_to_cart():
+    """This function allows the user to add different items to their cart, which saves the information in a list on the main scope"""
+    print()
+    user_quesadilla = input("Which quesadilla would you like?: ")
+    if user_quesadilla == 1:
+        user_cart.append(quesadillas[0])
+    elif user_quesadilla == 2:
+        user_cart.append(quesadillas[1])
+    elif user_quesadilla == 3:
+        user_cart.append(quesadillas[1])
+
+
+def calculate():
     pass
+
+
+def cart_menu():
+    """This function holds the cart menu for the user, which allows them to add additional items into their cart, remove items into their cart or simply view the items in their cart. """
+    pass # add while loop, so that it asks the user again and again if they want to add more or they are ready to check out.
+
+def main_menu():
+    """This function holds the main menu. It displays a range of different options the user can do in this ordering programme and executes them accordingly - by calling hte other function"""
+    print("Welcome to Queenstown Quesadilla's online orders")
     # view quesadilla menu (function)
     # view bevarage menu (function)
     # add option(s) to cart: (function)
