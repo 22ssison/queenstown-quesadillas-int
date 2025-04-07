@@ -26,15 +26,39 @@ def get_int(txt):
             print("Invalid Input. Please enter a number.")
             print()
 
+# fix
+def check_string(txt):
+    """This function checks each user string input and prevents the user from not entering anything and the program saving nothing."""
+    while True:
+        try: 
+            x = input(txt)
+            if len(x) > 0:
+                return x
+        except ValueError:
+            print("Please make sure that you have entered something in.")
+            print()
+
+# fix
+def phone_characters(txt):
+    """This function checks the number of characters entered in when the user has entered their phone number, and provides a barrier of how many characters they should enter in."""
+    while True:
+        try:
+            x = int(input(txt))
+            if len(x) >= 9 and len(x) <= 10:
+                return x
+        except ValueError:
+            print("Please make sure it is 9-10 characters long.")
+
 
 def delivery_user_info():
     """This function saves the user's info which is specific for the delivery option."""
     print()
     print("-- -- -- -- Customer Details -- -- -- --")
+    print()
     first_name = input("First Name: ").lower().strip()
     address = input("Address: ").lower().strip()
     phone_number = input("Phone Number: ").lower().strip()
-    user_info.append(first_name, address, phone_number)
+    user_info.extend([first_name.capitalize(), address, phone_number]) # "extend" + square brackets = another way to append more than one value into the user's list. 
     print()
     print("Details Saved.")
 
@@ -44,7 +68,7 @@ def pick_up_user_info():
     print()
     print("-- -- -- -- Customer Detail -- -- -- --")
     first_name = input("First Name: ").lower().strip()
-    user_info.append(first_name)
+    user_info.append(first_name.capitalize())
     print()
     print("Detail Saved.")
 
@@ -74,7 +98,7 @@ def add_to_cart():
     print()
     user_quesadilla = get_int("Which quesadilla would you like?: ")
     if user_quesadilla == 1:
-        user_cart.append(quesadillas[0])
+        user_cart.append(quesadillas[0]) # selects the specific quesadilla the user wants and adds the information for that quesadilla into the user's cart which is saved as another list.
         print(f"{quesadillas[0][0]} added to cart.")
     elif user_quesadilla == 2:
         user_cart.append(quesadillas[1])
@@ -100,10 +124,9 @@ def add_to_cart():
 
 # test + fix after creating working menu system
 def calculate():
-    for quesadilla in user_cart:
-        total_cost = quesadilla[2]
-        print(f"Total: ${total_cost}")
-
+    for item in user_cart:
+        total = sum(item[2])
+        print(f"Total: ${total:.2f}")
 
 def cart_menu():
     """This function holds the cart menu for the user, which allows them to add additional items into their cart, remove items into their cart or simply view the items in their cart. """
@@ -120,14 +143,26 @@ def display_cart():
     print()
     calculate()
 
-
+#fix
 def checkout():
-    pass
-        
+    if len(user_cart) == 0:
+        print()
+        print("You have 0 items in your cart.")
+    else:
+        for info in user_info:
+            if len(user_info) == 1:
+                print()
+                print(f"Customer Name: {info[0]}")
+            elif len(user_info) > 1:
+                print()
+                print(f"Customer Name: {info[0]} \nDelivery Address: {info[1]} \nPhone: {info[2]}")
+
 
 def main_menu():
     """This function holds the main menu. It displays a range of different options the user can do in this ordering programme and executes them accordingly - by calling hte other function"""
     print("Welcome to Queenstown Quesadilla's online orders")
+    print()
+    input("Press enter to continue")
     pickup_or_delivery()
     while True:
         print()
@@ -154,7 +189,22 @@ def main_menu():
             display_cart()
         elif choice == 4: 
             checkout()
-
+        
+        response = input("\nChoose again? (y/n):\n> ").lower().strip()
+        print()
+        if response not in ["y", "yes"]:
+            break
 
 if __name__ == "__main__": # python convention, anything under this  is ran only in this page.
     main_menu()
+
+"""
+tweaks:
+- tell them how many items they have in the cart when they click view cart details or sum
+- what if the user has nothing int their cart? (change this so that it tells them they have 0 items in the cart)
+- in the check out box, capitalise the first letter of the user's name + address + add a maximum phone number
+
+- check each and evefy integer input and do not allow any inputs to be a negative integer/float/etc
+
+
+"""
