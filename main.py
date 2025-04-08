@@ -16,12 +16,13 @@ user_info = [] # information will be saved after pickup/delivery function called
 user_cart = []
 
 
-def get_int(txt):
+def get_menu_int(txt):
     """This function is to check each integer user input to control the input types and prevent the program from crashing"""
     while True:
         try:
-            x = int(input(txt))
-            return x
+            x = int(input(txt)) # checks if this is an integer
+            if x >= 1 and x <= 8:
+                return x
         except ValueError:
             print("Invalid Input. Please enter a number.")
             print()
@@ -30,34 +31,31 @@ def get_int(txt):
 def check_string(txt):
     """This function checks each user string input and prevents the user from not entering anything and the program saving nothing."""
     while True:
-        try: 
-            x = input(txt)
-            if len(x) > 0:
-                return x
-        except ValueError:
-            print("Please make sure that you have entered something in.")
-            print()
+        x = input(txt).strip()
+        if x: # if it contains a value, it will be the same as "if True:"
+            return x
+        print("Input can't be blank. Please enter something.")
+        print()
 
-# fix
+# fix fix fix 
 def phone_characters(txt):
     """This function checks the number of characters entered in when the user has entered their phone number, and provides a barrier of how many characters they should enter in."""
     while True:
         try:
-            x = int(input(txt))
-            if len(x) >= 9 and len(x) <= 10:
+            x = int(input(txt)) # checks if this is an integer
+            if len(str(x)) >= 9 and len(str(x)) <= 10: # checks the length of the number by converting it into a string and through len
                 return x
         except ValueError:
-            print("Please make sure it is 9-10 characters long.")
-
+            print("Invalid phone number. Please enter a 9 or 10 digit number.")
 
 def delivery_user_info():
     """This function saves the user's info which is specific for the delivery option."""
     print()
     print("-- -- -- -- Customer Details -- -- -- --")
     print()
-    first_name = input("First Name: ").lower().strip()
-    address = input("Address: ").lower().strip()
-    phone_number = input("Phone Number: ").lower().strip()
+    first_name = check_string("First Name: ").lower().strip()
+    address = check_string("Address: ").lower().strip() # fix? .lower().strip()
+    phone_number = phone_characters("Phone Number: ") #fix
     user_info.extend([first_name.capitalize(), address, phone_number]) # "extend" + square brackets = another way to append more than one value into the user's list. 
     print()
     print("Details Saved.")
@@ -167,17 +165,13 @@ def main_menu():
     while True:
         print()
         print("-- -- -- -- -- -- -- -- -- -- -- -- -- -- --") # to emphasise the menu system
+        print()
         print("Select from the following options:")
-        print()
         print("1. View Quesadillas Menu") 
-        print()
         print("2. Add Quesadillas to Cart")
-        print()
         print("3. View Cart")
-        print()
         print("4. Checkout")
-        print()
-        choice = get_int("\n> ") #prevents the user from putting in an unexpected input
+        choice = get_int("\n> ") # used a number system instead to prevent user errors.
         print()
         print("-- -- -- -- -- -- -- -- -- -- -- -- -- -- --")
 
