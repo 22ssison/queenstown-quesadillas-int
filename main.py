@@ -16,16 +16,57 @@ user_info = [] # information will be saved after pickup/delivery function called
 user_cart = []
 
 
-def get_menu_int(txt):
+def check_response(txt):
+    while True:
+        x = input(txt).strip().lower() # strips any potential accidental spaces and makes it all lowercase.
+        if x: # if it contains a value, it will be the same as "if True:"
+            if x in ["y", "yes", "n", "no"]: 
+                return x
+            else: 
+                print("Please enter an appropriate response. (y/n)")
+        print("Input can't be blank. Please enter something.")
+
+def check_deliver_int(txt):
     """This function is to check each integer user input to control the input types and prevent the program from crashing"""
     while True:
         try:
             x = int(input(txt)) # checks if this is an integer
-            if x >= 1 and x <= 8:
+            if x in [1, 2]:
                 return x
+            else:
+                print("Please enter either 1 or 2.")
+                print()
         except ValueError:
             print("Invalid Input. Please enter a number.")
             print()
+
+
+def check_order_int(txt):
+    """This function is to check each integer user input to control the input types and prevent the program from crashing"""
+    while True:
+        try:
+            x = int(input(txt)) # won't count floats
+            if x >= 1 and x <= 8: # prevents negatives and other larger num
+                return x
+            else:
+                print("Please enter either a number between 1 and 8.")
+                print()
+        except ValueError:
+            print("Invalid Input. Please enter a number.")
+            print()
+
+
+def check_menu_int(txt):
+    """This function is to check each integer user input to control the input types and prevent the program from crashing"""
+    while True:
+        try:
+            x = int(input(txt))
+            if x >= 1 and x <= 4: 
+                return x
+            else:
+                print("Please enter either a number between 1 and 4.")
+        except ValueError:
+            print("Invalid Input. Please enter a number.")
 
 # fix
 def check_string(txt):
@@ -54,7 +95,7 @@ def delivery_user_info():
     print("-- -- -- -- Customer Details -- -- -- --")
     print()
     first_name = check_string("First Name: ").lower().strip()
-    address = check_string("Address: ").lower().strip() # fix? .lower().strip()
+    address = check_string("Address: ") # fix? .lower().strip()
     phone_number = phone_characters("Phone Number: ") #fix
     user_info.extend([first_name.capitalize(), address, phone_number]) # "extend" + square brackets = another way to append more than one value into the user's list. 
     print()
@@ -65,8 +106,9 @@ def pick_up_user_info():
     """This function saves the user's info which is specific for the pick up option."""
     print()
     print("-- -- -- -- Customer Detail -- -- -- --")
-    first_name = input("First Name: ").lower().strip()
-    user_info.append(first_name.capitalize())
+    print()
+    first_name = check_string("First Name: ").lower().strip()
+    user_info.append(first_name.capitalize()) # puts it into the user info list with the first letter of the name capitalised
     print()
     print("Detail Saved.")
 
@@ -74,12 +116,52 @@ def pick_up_user_info():
 def pickup_or_delivery():
     """This funciton asks the user to choose whether they want to pick up the food or get it delivered. It also determines what information is asked of them."""
     print()
-    option = get_int("Please select from the following options: \n1) Pick up \n2) Delivery\n> ")
+    option = check_deliver_int("Please select from the following options: \n1) Pick up \n2) Delivery\n> ")
     if option == 1:
         pick_up_user_info()
     elif option == 2:
         delivery_user_info()
 
+# fix
+# should i not make this a separate function anymore? just put this option in the display menu option?
+def add_to_cart():
+    """This function allows the user to add different items to their cart, which saves the information in a list on the main scope"""
+    print()
+    user_quesadilla = check_order_int("Which quesadilla would you like?: ")
+    quantity = int(input("How many quesadillas would you like to add?: \n> ")) # fix by making another check funciton and have barriers of a min and max ammount.
+    if user_quesadilla == 1:
+        user_cart.append(quesadillas[0]) # selects the specific quesadilla the user wants and adds the information for that quesadilla into the user's cart which is saved as another list.
+        user_cart[0].append(quantity)  # adds another element (index 3) in the list withint the list which will account for the quantity the user wants
+        print(f"x{quantity} {quesadillas[0][0]} added to cart.")
+    elif user_quesadilla == 2:
+        user_cart.append(quesadillas[1])
+        user_cart[0].append(quantity)
+        print(f"x{quantity} {quesadillas[1][0]} added to cart.")
+    elif user_quesadilla == 3:
+        user_cart.append(quesadillas[2])
+        user_cart[0].append(quantity)
+        print(f"x{quantity} {quesadillas[2][0]} added to cart.")
+    elif user_quesadilla == 4:
+        user_cart.append(quesadillas[3])
+        user_cart[0].append(quantity)
+        print(f"x{quantity} {quesadillas[3][0]} added to cart.")
+    elif user_quesadilla == 5:
+        user_cart.append(quesadillas[4])
+        user_cart[0].append(quantity)
+        print(f"x{quantity} {quesadillas[4][0]} added to cart.")
+    elif user_quesadilla == 6:
+        user_cart.append(quesadillas[5])
+        user_cart[0].append(quantity)
+        print(f"x{quantity} {quesadillas[5][0]} added to cart.")
+    elif user_quesadilla == 7:
+        user_cart.append(quesadillas[6])
+        user_cart[0].append(quantity)
+        print(f"x{quantity} {quesadillas[6][0]} added to cart.")
+    elif user_quesadilla == 8:
+        user_cart.append(quesadillas[7])
+        user_cart[0].append(quantity)
+        print(f"x{quantity} {quesadillas[7][0]} added to cart.")
+    print(user_cart)
 
 def quesadillas_menu():
     """This function displays all the available quesadillas with a price and a description."""
@@ -88,37 +170,10 @@ def quesadillas_menu():
         count += 1 # adds 1 to count 
         print()
         print(f"{count}) {quesadilla[0]} - ${quesadilla[2]}\n{quesadilla[1]}")
-
-# fix
-# should i not make this a separate function anymore? just put this option in the display menu option?
-def add_to_cart():
-    """This function allows the user to add different items to their cart, which saves the information in a list on the main scope"""
     print()
-    user_quesadilla = get_int("Which quesadilla would you like?: ")
-    if user_quesadilla == 1:
-        user_cart.append(quesadillas[0]) # selects the specific quesadilla the user wants and adds the information for that quesadilla into the user's cart which is saved as another list.
-        print(f"{quesadillas[0][0]} added to cart.")
-    elif user_quesadilla == 2:
-        user_cart.append(quesadillas[1])
-        print(f"{quesadillas[1][0]} added to cart.")
-    elif user_quesadilla == 3:
-        user_cart.append(quesadillas[2])
-        print(f"{quesadillas[2][0]} added to cart.")
-    elif user_quesadilla == 4:
-        user_cart.append(quesadillas[3])
-        print(f"{quesadillas[3][0]} added to cart.")
-    elif user_quesadilla == 5:
-        user_cart.append(quesadillas[4])
-        print(f"{quesadillas[4][0]} added to cart.")
-    elif user_quesadilla == 6:
-        user_cart.append(quesadillas[5])
-        print(f"{quesadillas[5][0]} added to cart.")
-    elif user_quesadilla == 7:
-        user_cart.append(quesadillas[6])
-        print(f"{quesadillas[6][0]} added to cart.")
-    elif user_quesadilla == 8:
-        user_cart.append(quesadillas[7])
-        print(f"{quesadillas[7][0]} added to cart.")
+    order = check_response("Would you like to add items into your cart? (y/n): \n> ")
+    if order in ["y", "yes"]:
+        add_to_cart()
 
 # test + fix after creating working menu system
 def calculate():
@@ -133,7 +188,9 @@ def cart_menu():
 def display_cart():
     print()
     print("🛒 Your Cart:")
-    count = 0 # to keep count of how many elements three are in the list.     
+    count = 0 # to keep count of how many elements three are in the list.
+    if len(user_cart) == 0:
+        print("You have 0 items inside your cart.")     
     for quesadilla in user_cart:
         count += 1
         print()
@@ -168,29 +225,28 @@ def main_menu():
         print()
         print("Select from the following options:")
         print("1. View Quesadillas Menu") 
-        print("2. Add Quesadillas to Cart")
+        print("2. ") # fix
         print("3. View Cart")
         print("4. Checkout")
-        choice = get_int("\n> ") # used a number system instead to prevent user errors.
+        choice = check_menu_int("\n> ") # used a number system instead to prevent user errors.
         print()
         print("-- -- -- -- -- -- -- -- -- -- -- -- -- -- --")
 
         if choice == 1: 
             quesadillas_menu()
         elif choice == 2: 
-            add_to_cart()
+            pass # fix
         elif choice == 3: 
             display_cart()
         elif choice == 4: 
             checkout()
         
-        response = input("\nChoose again? (y/n):\n> ").lower().strip()
-        print()
+        response = check_response("\nBack to main menu? (y/n):\n> ")
         if response not in ["y", "yes"]:
             break
 
 if __name__ == "__main__": # python convention, anything under this  is ran only in this page.
-    main_menu()
+    add_to_cart()
 
 """
 tweaks:
