@@ -15,6 +15,22 @@ quesadillas = [["Classic Cheese Quesadilla", "Melted cheddar & mozzarella in a c
 user_info = [] # information will be saved after pickup/delivery function called.
 user_cart = []
 
+#integer
+def check_rem_int(txt):
+    """This function is specific to the remove items function. Its special because the barier amounts (options) can change all the time according to how many items the user has in their cart."""
+    while True:
+        try:
+            x = int(input(txt)) # checks if this is an integer
+            max_options = len(user_cart) # length of the list
+            if x >= 1 and x <= max_options:
+                return x
+            else:
+                print(f"Invalid choice. You can only select a number between 1-{max_options}.")
+                print()
+        except ValueError:
+            print("Invalid Input. Please enter a number.")
+            print()
+
 # integer
 def check_quantity(txt):
     """This function is specific to how many quesadillas the user wants. It sets bounderies to deal with unexpected inputs."""
@@ -46,7 +62,7 @@ def check_response(txt):
 
 # integer
 def check_deliver_int(txt):
-    """This function is specific to checking the user's input for the pickup or delivery prompt."""
+    """This function is specific to checking the user's input for the pickup or delivery prompt and when removing items."""
     while True:
         try:
             x = int(input(txt)) # checks if this is an integer
@@ -198,6 +214,24 @@ def quesadillas_menu():
             add_to_cart()
 
 
+def rem_items():
+    if len(user_cart) == 0:
+        print("Your cart is empty. No items to remove.")
+    else:
+        print("🛒 Your Cart:")
+        for index, quesadilla in enumerate(user_cart):
+            name = quesadilla[0]
+            price = quesadilla[2]
+            quantity = quesadilla[3]
+            print(f"{index + 1}) {name} (x{quantity}) - ${price:.2f} each")
+        
+        print(f"Enter the item number you want to remove:")
+        index_item_rem = check_rem_int("> ") - 1 # minus 1 because we need to keep in mind the index. Since we added +1, we have to subtract it again to get the index #.
+        removed_item = user_cart[index_item_rem] # saves info about the item about to be removed so it can tell the user what has been removed.
+        user_cart.remove(user_cart[index_item_rem])
+        print(f"All {removed_item[0]}s removed from cart.")
+
+    
 def calculate():
     """This function calculates the total cost of the user's items."""
     total = 0
@@ -254,15 +288,16 @@ def checkout():
         print()
         print("You have 0 items in your cart.")
     else:
-        for info in user_info:
-            if "pick-up" in user_info: # pick-up
-                print()
-                print(f"Customer Name: {info[0]}")
-                print()
-                order_summary()
-            elif "delivery" in user_info: # delivery
-                print()
-                print(f"Customer Name: {info[0]} \nDelivery Address: {info[1]} \nPhone: {info[2]}")
+        if "pick-up" in user_info: # pick-up
+            print()
+            print(f"Customer Name: {user_info[0]}")
+            print()
+            order_summary()
+        elif "delivery" in user_info: # delivery
+            print()
+            print(f"Customer Name: {user_info[0]} \nDelivery Address: {user_info[1]} \nPhone: {user_info[2]}")
+            print()
+            order_summary()
 
 
 def main_menu():
@@ -290,7 +325,7 @@ def main_menu():
         elif choice == 2: 
             display_cart()
         elif choice == 3:
-            pass
+            rem_items()
         elif choice == 4: 
             checkout()
         elif choice == 5:
