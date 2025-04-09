@@ -15,6 +15,8 @@ quesadillas = [["Classic Cheese Quesadilla", "Melted cheddar & mozzarella in a c
 user_info = [] # information will be saved after pickup/delivery function called.
 user_cart = []
 
+DELIVERY_FEE = 15 # constant
+
 #integer
 def check_rem_int(txt):
     """This function is specific to the remove items function. Its special because the barier amounts (options) can change all the time according to how many items the user has in their cart."""
@@ -136,9 +138,10 @@ def delivery_user_info():
     address = check_string("Address: ") # fix? .lower().strip()
     phone_number = check_phone_characters("Phone Number: ") 
     user_info.extend([first_name.capitalize(), address, phone_number]) # ".extend" is like .append, but appends more than 1 element into the list. 
-    user_info.append("delivery") # operation
+    user_info.append("delivery") # operation (index 3)
     print()
     print("Details Saved.")
+    
 
 
 def pick_up_user_info():
@@ -148,7 +151,7 @@ def pick_up_user_info():
     print()
     first_name = check_string("First Name: ").lower().strip()
     user_info.append(first_name.capitalize()) # puts it into the user info list with the first letter of the name capitalised
-    user_info.append("pick-up") # operation
+    user_info.append("pick-up") # operation (index 1)
     print()
     print("Detail Saved.")
 
@@ -167,31 +170,26 @@ def add_to_cart():
     """This function allows the user to add different items to their cart, which saves the information in a list on the main scope"""
     print()
     user_quesadilla = check_order_int("Which quesadilla would you like?: ")
-    quantity = check_quantity("Quantity?: ") # fix by making another check funciton and have barriers of a min and max ammount.
-    if user_quesadilla == 1:
-        user_cart.append([quesadillas[0][0], quesadillas[0][1], quesadillas[0][2], quantity]) # specific quesadilla info being appended into the user's list as well as a new element (index 3) for the quantity the user wants.
-        print(f"x{quantity} {quesadillas[0][0]}(s) added to cart.")
-    elif user_quesadilla == 2:
-        user_cart.append([quesadillas[1][0], quesadillas[1][1], quesadillas[1][2], quantity])
-        print(f"x{quantity} {quesadillas[1][0]}(s) added to cart.")
-    elif user_quesadilla == 3:
-        user_cart.append([quesadillas[2][0], quesadillas[2][1], quesadillas[2][2], quantity])
-        print(f"x{quantity} {quesadillas[2][0]}(s) added to cart.")
-    elif user_quesadilla == 4:
-        user_cart.append([quesadillas[3][0], quesadillas[3][1], quesadillas[3][2], quantity])
-        print(f"x{quantity} {quesadillas[3][0]}(s) added to cart.")
-    elif user_quesadilla == 5:
-        user_cart.append([quesadillas[4][0], quesadillas[4][1], quesadillas[4][2], quantity])
-        print(f"x{quantity} {quesadillas[4][0]}(s) added to cart.")
-    elif user_quesadilla == 6:
-        user_cart.append([quesadillas[5][0], quesadillas[5][1], quesadillas[5][2], quantity])
-        print(f"x{quantity} {quesadillas[5][0]}(s) added to cart.")
-    elif user_quesadilla == 7:
-        user_cart.append([quesadillas[6][0], quesadillas[6][1], quesadillas[6][2], quantity])
-        print(f"x{quantity} {quesadillas[6][0]}(s) added to cart.")
-    elif user_quesadilla == 8:
-        user_cart.append([quesadillas[7][0], quesadillas[7][1], quesadillas[7][2], quantity])
-        print(f"x{quantity} {quesadillas[7][0]}(s) added to cart.")
+    quantity = check_quantity("Quantity?: ") # checks if its in range 1-5
+    # checks first if they want to add more than 5 quesadillas.
+
+    selected_item = quesadillas[user_quesadilla -1]
+    name = selected_item[0]
+    price = selected_item[2]
+    
+    for item in user_cart:
+        if item[0] == name: # if the name of the item is equal to the quesadilla the user selected. (user_quesadilla -1 gets the index of the quesadilla since the menu system is also arranged accordingly.)
+            total_quantity = item[2] + quantity # initial existing quantity + new quantity they want to add
+            if total_quantity <= 5: # barrier, limit = 5
+                item[2] = total_quantity # replaces (updates) element 2 of the list within user_cart list which in this case is the quantity of the item.
+                print(f"x{quantity} more {name}(s) added to cart.")
+                return # exit & don't run the code below this.
+            else:
+                print("You can only order a maximum amount of 5 quesadillas of each kind.")
+                return # exit & don't run the code below this.
+    # if it isnt in the cart at all, the program should add it.
+    user_cart.append([selected_item[0], selected_item[2], quantity])
+    print(f"x{quantity} {selected_item[0]}(s) added to cart.")
 
 
 def quesadillas_menu():
@@ -215,6 +213,7 @@ def quesadillas_menu():
 
 
 def rem_items():
+    """This funciton targets and removes the items the user wants to take out of their cart."""
     if len(user_cart) == 0:
         print("Your cart is empty. No items to remove.")
     else:
@@ -232,17 +231,29 @@ def rem_items():
         print(f"All {removed_item[0]}s removed from cart.")
 
     
-def calculate():
+def calculate_standard():
     """This function calculates the total cost of the user's items."""
     total = 0
     for quesadilla in user_cart:
-        price = quesadilla[2]
-        quantity = quesadilla[3]
+        price = quesadilla[1]
+        quantity = quesadilla[2]
         total += price * quantity
     print(f"Total Cost: ${total:.2f}") # make sure the output is 2dp
 
 
+def calculate_delivery():
+    """This function calculates the total cost of the user's items plus adds on a delivery fee."""
+    total = 0
+    for quesadilla in user_cart:
+        price = quesadilla[1]
+        quantity = quesadilla[2]
+        total += price * quantity + DELIVERY_FEE
+    print(f"Total Cost: ${total:.2f}") # make sure the output is 2dp
+
+
 def display_cart():
+    """Displays what the user has in their cart in that moment."""
+    print(user_cart)
     """This funciton displays all the items the user currently has within their cart."""
     print()
     print("🛒 Your Cart:")
@@ -253,13 +264,27 @@ def display_cart():
         total_quantity = 0 # keeps track the total amount of quesadillas the user has in cart
         for quesadilla in user_cart:
             name = quesadilla[0] # arranged in this style because it started to get super confusing.
-            price = quesadilla[2]
-            quantity = quesadilla[3]
+            price = quesadilla[1]
+            quantity = quesadilla[2]
             total_quantity += quantity
             print(f"(x{quantity}) {name}(s) - ${price:.2f} each")
         print(f"\nTotal Quesadillas: {total_quantity}")
-        calculate()
+        calculate_standard()
 
+
+def cancel_order():
+    """This function allows the user to cancel their order."""
+    if len(user_cart) == 0:
+        print("Your cart is empty. There is no order to cancel.")
+    else:
+        print("Are you sure you want to cancel your order? (y/n): ")
+        confirm = check_response("> ")
+        if confirm in ["y", "yes"]:
+            user_cart.clear() # clear info 
+            user_info.clear() # clear info
+            print("Your order has successfully been cancelled.")
+        else:
+            print("Your order has not been cancelled.")
 
 def order_summary():
     """Is a summary reciept of the user's order."""
@@ -273,13 +298,17 @@ def order_summary():
         total_quantity = 0 # keeps track the total amount of quesadillas the user has in cart
         for quesadilla in user_cart:
             name = quesadilla[0] # arranged in this style because it started to get super confusing.
-            price = quesadilla[2]
-            quantity = quesadilla[3]
+            price = quesadilla[1]
+            quantity = quesadilla[2]
             total_quantity += quantity
             print(f"(x{quantity}) {name}(s) - ${price:.2f} each - amount: ${price * quantity:.2f}")
 
         print(f"\nTotal Quesadillas: {total_quantity}")
-        calculate()
+        if len(user_info) > 2:
+            print(f"Delivery fee: ${DELIVERY_FEE}")
+            calculate_delivery()
+            return # end here
+        calculate_standard()
 
 
 def checkout():
