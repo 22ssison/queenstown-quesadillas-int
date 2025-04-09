@@ -21,10 +21,10 @@ def check_quantity(txt):
     while True:
         try:
             x = int(input(txt)) # checks if this is an integer
-            if x >= 1 and x <= 10:
+            if x >= 1 and x <= 5:
                 return x
             else:
-                print("Invalid quantity. You can only order 1-10 quesadillas at a time.")
+                print("Invalid quantity. You can only order 1-5 quesadillas of each type at a time.")
                 print()
         except ValueError:
             print("Invalid Input. Please enter a number.")
@@ -80,10 +80,10 @@ def check_menu_int(txt):
     while True:
         try:
             x = int(input(txt))
-            if x >= 1 and x <= 4: 
+            if x >= 1 and x <= 5: 
                 return x
             else:
-                print("Please enter either a number between 1 and 4.")
+                print("Please enter either a number between 1 and 5.")
         except ValueError:
             print("Invalid Input. Please enter a number.")
 
@@ -119,7 +119,8 @@ def delivery_user_info():
     first_name = check_string("First Name: ").lower().strip()
     address = check_string("Address: ") # fix? .lower().strip()
     phone_number = check_phone_characters("Phone Number: ") 
-    user_info.append([first_name.capitalize(), address, phone_number])
+    user_info.extend([first_name.capitalize(), address, phone_number]) # ".extend" is like .append, but appends more than 1 element into the list. 
+    user_info.append("delivery") # operation
     print()
     print("Details Saved.")
 
@@ -131,6 +132,7 @@ def pick_up_user_info():
     print()
     first_name = check_string("First Name: ").lower().strip()
     user_info.append(first_name.capitalize()) # puts it into the user info list with the first letter of the name capitalised
+    user_info.append("pick-up") # operation
     print()
     print("Detail Saved.")
 
@@ -149,85 +151,103 @@ def add_to_cart():
     """This function allows the user to add different items to their cart, which saves the information in a list on the main scope"""
     print()
     user_quesadilla = check_order_int("Which quesadilla would you like?: ")
-    quantity = check_quantity(f"Quantity?: ") # fix by making another check funciton and have barriers of a min and max ammount.
+    quantity = check_quantity("Quantity?: ") # fix by making another check funciton and have barriers of a min and max ammount.
     if user_quesadilla == 1:
-        user_cart.append(quesadillas[0]) # selects the specific quesadilla the user wants and adds the information for that quesadilla into the user's cart which is saved as another list.
-        user_cart[0].append(quantity)  # adds another element (index 3) in the list withint the list which will account for the quantity the user wants
+        user_cart.append([quesadillas[0][0], quesadillas[0][1], quesadillas[0][2], quantity]) # specific quesadilla info being appended into the user's list as well as a new element (index 3) for the quantity the user wants.
         print(f"x{quantity} {quesadillas[0][0]}(s) added to cart.")
     elif user_quesadilla == 2:
-        user_cart.append(quesadillas[1])
-        user_cart[0].append(quantity)
+        user_cart.append([quesadillas[1][0], quesadillas[1][1], quesadillas[1][2], quantity])
         print(f"x{quantity} {quesadillas[1][0]}(s) added to cart.")
     elif user_quesadilla == 3:
-        user_cart.append(quesadillas[2])
-        user_cart[0].append(quantity)
+        user_cart.append([quesadillas[2][0], quesadillas[2][1], quesadillas[2][2], quantity])
         print(f"x{quantity} {quesadillas[2][0]}(s) added to cart.")
     elif user_quesadilla == 4:
-        user_cart.append(quesadillas[3])
-        user_cart[0].append(quantity)
+        user_cart.append([quesadillas[3][0], quesadillas[3][1], quesadillas[3][2], quantity])
         print(f"x{quantity} {quesadillas[3][0]}(s) added to cart.")
     elif user_quesadilla == 5:
-        user_cart.append(quesadillas[4])
-        user_cart[0].append(quantity)
+        user_cart.append([quesadillas[4][0], quesadillas[4][1], quesadillas[4][2], quantity])
         print(f"x{quantity} {quesadillas[4][0]}(s) added to cart.")
     elif user_quesadilla == 6:
-        user_cart.append(quesadillas[5])
-        user_cart[0].append(quantity)
+        user_cart.append([quesadillas[5][0], quesadillas[5][1], quesadillas[5][2], quantity])
         print(f"x{quantity} {quesadillas[5][0]}(s) added to cart.")
     elif user_quesadilla == 7:
-        user_cart.append(quesadillas[6])
-        user_cart[0].append(quantity)
+        user_cart.append([quesadillas[6][0], quesadillas[6][1], quesadillas[6][2], quantity])
         print(f"x{quantity} {quesadillas[6][0]}(s) added to cart.")
     elif user_quesadilla == 8:
-        user_cart.append(quesadillas[7])
-        user_cart[0].append(quantity)
+        user_cart.append([quesadillas[7][0], quesadillas[7][1], quesadillas[7][2], quantity])
         print(f"x{quantity} {quesadillas[7][0]}(s) added to cart.")
 
 
 def quesadillas_menu():
-    """This function displays all the available quesadillas with a price and a description."""
+    """This function displays all the available quesadillas with a price and a description + allows the user to order off the menu."""
     count = 0 # to keep count of how many elements three are in the list.
     for quesadilla in quesadillas:
         count += 1 # adds 1 to count 
         print()
         print(f"{count}) {quesadilla[0]} - ${quesadilla[2]}\n{quesadilla[1]}")
     print()
-    print("Would you like to add items into your cart? (y/n):")
+    print("🛒 Add items to cart? (y/n):")
     order = check_response("> ")
     if order in ["y", "yes"]:
         add_to_cart()
+    while order in ["y", "yes"]: # while loop so that it asks the user again and again if they want to add more things to their order until they are satisfied.
+        print()
+        print("🛒 Add more items? (y/n):")
+        order = check_response("> ")
+        if order in ["y", "yes"]:
+            add_to_cart()
 
 
 def calculate():
     """This function calculates the total cost of the user's items."""
+    total = 0
     for quesadilla in user_cart:
-        total = sum(quesadilla[2])
-        print(f"Total Cost: ${total:.2f}") # make sure the output is 2dp
-
-# fix
-def cart_menu():
-    """This function holds the cart menu for the user, which allows them to add additional items into their cart, remove items into their cart or simply view the items in their cart. """
-    pass # add while loop, so that it asks the user again and again if they want to add more or they are ready to check out.
+        price = quesadilla[2]
+        quantity = quesadilla[3]
+        total += price * quantity
+    print(f"Total Cost: ${total:.2f}") # make sure the output is 2dp
 
 
 def display_cart():
     """This funciton displays all the items the user currently has within their cart."""
     print()
     print("🛒 Your Cart:")
-    count = 0 # to keep count of how many elements three are in the list.
+
     if len(user_cart) == 0:
         print("You have 0 items inside your cart.")    
     else:
+        total_quantity = 0 # keeps track the total amount of quesadillas the user has in cart
         for quesadilla in user_cart:
-            count += 1
-            total_quantity = sum(quesadilla[3])
-            print()
-            print(f"{count}) {quesadilla[0]} - ${quesadilla[2]}")
-        print()
-        print(f"You ordered {total_quantity} quesadillas.")
+            name = quesadilla[0] # arranged in this style because it started to get super confusing.
+            price = quesadilla[2]
+            quantity = quesadilla[3]
+            total_quantity += quantity
+            print(f"(x{quantity}) {name}(s) - ${price:.2f} each")
+        print(f"\nTotal Quesadillas: {total_quantity}")
         calculate()
 
-#fix
+
+def order_summary():
+    """Is a summary reciept of the user's order."""
+    print()
+    print("💳 Order Summary:")
+    print()
+    if len(user_cart) == 0:
+        print()
+        print(f"You have 0 quesadillas in your cart.")    
+    else:
+        total_quantity = 0 # keeps track the total amount of quesadillas the user has in cart
+        for quesadilla in user_cart:
+            name = quesadilla[0] # arranged in this style because it started to get super confusing.
+            price = quesadilla[2]
+            quantity = quesadilla[3]
+            total_quantity += quantity
+            print(f"(x{quantity}) {name}(s) - ${price:.2f} each - amount: ${price * quantity:.2f}")
+
+        print(f"\nTotal Quesadillas: {total_quantity}")
+        calculate()
+
+
 def checkout():
     """This function allows the user to secure their order once they are happy with all the items they have in their cart."""
     if len(user_cart) == 0:
@@ -235,10 +255,12 @@ def checkout():
         print("You have 0 items in your cart.")
     else:
         for info in user_info:
-            if len(user_info) == 1:
+            if "pick-up" in user_info: # pick-up
                 print()
                 print(f"Customer Name: {info[0]}")
-            elif len(user_info) > 1:
+                print()
+                order_summary()
+            elif "delivery" in user_info: # delivery
                 print()
                 print(f"Customer Name: {info[0]} \nDelivery Address: {info[1]} \nPhone: {info[2]}")
 
@@ -256,7 +278,9 @@ def main_menu():
         print("Select from the following options:")
         print("1. View Quesadillas Menu") 
         print("2. View Cart")
-        print("3. Checkout")
+        print("3. Remove Items")
+        print("4. Complete Order")
+        print("5. Cancel Order")
         choice = check_menu_int("\n> ") # used a number system instead to prevent user errors.
         print()
         print("-- -- -- -- -- -- -- -- -- -- -- -- -- -- --")
@@ -265,8 +289,12 @@ def main_menu():
             quesadillas_menu()
         elif choice == 2: 
             display_cart()
-        elif choice == 3: 
+        elif choice == 3:
+            pass
+        elif choice == 4: 
             checkout()
+        elif choice == 5:
+            pass
         
         response = check_response("\nBack to main menu? (y/n):\n> ")
         if response not in ["y", "yes"]:
@@ -275,12 +303,3 @@ def main_menu():
 
 if __name__ == "__main__": # python convention, anything under this is ran only inside this page.
    main_menu()
-
-"""
-tweaks:
-- tell them how many items they have in the cart when they click view cart details or sum
-- what if the user has nothing int their cart? (change this so that it tells them they have 0 items in the cart)
-- in the check out box, capitalise the first letter of the user's name + address + add a maximum phone number
-
-- check each and evefy integer input and do not allow any inputs to be a negative integer/float/etc
-"""
