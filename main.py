@@ -1,3 +1,5 @@
+import sys # for program termination
+
 """This is an online ordering program for 'Queenstown Quesadillas' made for customers who want to pre order food and beverages for pickup or delivery."""
 
 
@@ -98,10 +100,10 @@ def check_menu_int(txt):
     while True:
         try:
             x = int(input(txt))
-            if x >= 1 and x <= 5: 
+            if x >= 1 and x <= 6: 
                 return x
             else:
-                print("Please enter either a number between 1 and 5.")
+                print("Please enter either a number between 1 and 7.")
         except ValueError:
             print("Invalid Input. Please enter a number.")
 
@@ -220,8 +222,8 @@ def rem_items():
         print("🛒 Your Cart:")
         for index, quesadilla in enumerate(user_cart):
             name = quesadilla[0]
-            price = quesadilla[2]
-            quantity = quesadilla[3]
+            price = quesadilla[1]
+            quantity = quesadilla[2]
             print(f"{index + 1}) {name} (x{quantity}) - ${price:.2f} each")
         
         print(f"Enter the item number you want to remove:")
@@ -247,13 +249,12 @@ def calculate_delivery():
     for quesadilla in user_cart:
         price = quesadilla[1]
         quantity = quesadilla[2]
-        total += price * quantity + DELIVERY_FEE
+        total += price * quantity
+    total += DELIVERY_FEE
     print(f"Total Cost: ${total:.2f}") # make sure the output is 2dp
 
 
 def display_cart():
-    """Displays what the user has in their cart in that moment."""
-    print(user_cart)
     """This funciton displays all the items the user currently has within their cart."""
     print()
     print("🛒 Your Cart:")
@@ -271,6 +272,42 @@ def display_cart():
         print(f"\nTotal Quesadillas: {total_quantity}")
         calculate_standard()
 
+
+def end_program():
+    """Function to end program"""
+    print()
+    print("Would you like to exit the program?: ")
+    choice = check_response("> ")
+    if choice in ["y", "yes"]:
+        # clear all info before exiting
+        user_cart.clear()
+        user_info.clear()
+
+        print("Thank you for choosing Queenstown Quesadillas.")
+        sys.exit()
+    else:
+        pass
+
+def end_or_restart_program():
+    """Function to end or restart the program"""
+    print()
+    print("Would you like to 1) restart or 2) exit the program?: ")
+    choice = check_deliver_int("> ")
+    if choice == 1:
+        # clear all info before restarting
+        user_cart.clear()
+        user_info.clear()
+    
+        print("Restarting...")
+        main_menu()
+    else:
+        # clear all info before exiting
+        user_cart.clear()
+        user_info.clear()
+
+        print("Thank you for choosing Queenstown Quesadillas.")
+        sys.exit()
+    
 
 def cancel_order():
     """This function allows the user to cancel their order."""
@@ -322,11 +359,13 @@ def checkout():
             print(f"Customer Name: {user_info[0]}")
             print()
             order_summary()
+            print("Order Placed. You can expect your order ready for pickup in 10-15 minutes.")
         elif "delivery" in user_info: # delivery
             print()
             print(f"Customer Name: {user_info[0]} \nDelivery Address: {user_info[1]} \nPhone: {user_info[2]}")
             print()
             order_summary()
+            print("Order Placed. We are only taking cash at this point. Your order will be delivered to you soon.")
 
 
 def main_menu():
@@ -345,6 +384,7 @@ def main_menu():
         print("3. Remove Items")
         print("4. Complete Order")
         print("5. Cancel Order")
+        print("6. Restart/Exit Program")
         choice = check_menu_int("\n> ") # used a number system instead to prevent user errors.
         print()
         print("-- -- -- -- -- -- -- -- -- -- -- -- -- -- --")
@@ -357,12 +397,17 @@ def main_menu():
             rem_items()
         elif choice == 4: 
             checkout()
+            break
         elif choice == 5:
-            pass
+            cancel_order()
+            break
+        elif choice == 6:
+            end_or_restart_program()
+            break
         
         response = check_response("\nBack to main menu? (y/n):\n> ")
         if response not in ["y", "yes"]:
-            break
+            end_program()
 
 
 if __name__ == "__main__": # python convention, anything under this is ran only inside this page.
