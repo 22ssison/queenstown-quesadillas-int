@@ -2,7 +2,6 @@ import sys # for program termination
 
 """This is an online ordering program for 'Queenstown Quesadillas' made for customers who want to pre order food and beverages for pickup or delivery."""
 
-
 # quesadilla, description, price
 quesadillas = [["Classic Cheese Quesadilla", "Melted cheddar & mozzarella in a crispy flour tortilla, served with salsa & sour cream.", 9.99], 
                ["Chicken & Cheese Quesadilla", "Grilled chicken, cheddar, mozzarella, and mild spices, served with sour cream & guacamole.", 12.99], 
@@ -16,6 +15,7 @@ quesadillas = [["Classic Cheese Quesadilla", "Melted cheddar & mozzarella in a c
 """I put the user information in the main scope because the program has to utilise this information at the end (to confirm with the user)."""
 user_info = [] # information will be saved after pickup/delivery function called.
 user_cart = []
+
 
 DELIVERY_FEE = 15 # constant
 
@@ -144,7 +144,6 @@ def delivery_user_info():
     print()
     print("Details Saved.")
     
-
 
 def pick_up_user_info():
     """This function saves the user's info which is specific for the pick up option."""
@@ -288,6 +287,7 @@ def end_program():
     else:
         pass
 
+
 def end_or_restart_program():
     """Function to end or restart the program"""
     print()
@@ -322,6 +322,7 @@ def cancel_order():
             print("Your order has successfully been cancelled.")
         else:
             print("Your order has not been cancelled.")
+
 
 def order_summary():
     """Is a summary reciept of the user's order."""
